@@ -7,7 +7,7 @@
 [init]
 configurationError = ""
 compatibilityError = ""
-RCVersionWarn = ""
+devVersionWarn = ""
 devEnvWarn = ""
 quicklyUpgrade = ""
 # === init ===
@@ -20,6 +20,9 @@ noscript = ""
 # === baseof ===
 
 # === Taxonomy ===
+[archives]
+other = ""
+
 [allSome]
 other = "Све {{ .Some }}"
 
@@ -28,6 +31,12 @@ other = "Категорија"
 
 [categories]
 other = "Категорије"
+
+[collection]
+other = ""
+
+[collections]
+other = ""
 
 [tag]
 other = "Таг"
@@ -44,6 +53,10 @@ other = "Постови"
 recentlyUpdated = "Недавно Ажурирано"
 
 [section.totalWordCount]
+one = ""
+other = ""
+
+[section.archiveCounter]
 one = ""
 other = ""
 # === Section ===
@@ -82,7 +95,6 @@ searchPlaceholder = "Претражи наслове или садржај..."
 clear = "Очисти"
 cancel = "Поништи"
 noResultsFound = "Без резултата"
-lunrLanguageCode = "sr"
 copyToClipboard = "Копирај на радну таблу"
 editLockTitle = "Закључај блок кода који се може уређивати"
 editUnLockTitle = "Откључајте блок кода који се може уређивати"
@@ -98,16 +110,18 @@ other = "Подели на"
 
 # === posts/single.html ===
 [single]
-contents= "Садржаји"
-repost= ""
-publishedOnDate= "објављено {{ .Date }}"
-includedInCategories= "укључено {{ .Categories }}"
+contents = "Садржаји"
+pin = ""
+repost = ""
+publishedOnDate = "објављено {{ .Date }}"
 views = "прегледа"
 comments = "коментари"
 author = "Аутор"
 updatedOnDate = "Ажурирано {{ .Date }}"
 readMarkdown = "Читај Markdown"
+viewSource = ""
 editThisPage = "Уреди ову страницу"
+reportIssue = ""
 back = "Назад"
 home = "Почетна"
 readMore = "Прочитај више"
@@ -115,7 +129,14 @@ expirationReminder = "Овај чланак је последњи пут ажу�
 encryptedAbstract = ""
 encryptedMessage = ""
 password = "Паролица"
+enterBtn = ""
 encryptyAgain = ""
+relatedContent = "Повезани садржај"
+
+[single.includedIn]
+categories = "укључено {{ .Categories }}"
+collections = "укључено {{ .Collections }}"
+both = "укључено {{ .Categories }} и {{ .Collections }}"
 
 [single.wordCount]
 one = "Једна реч"
@@ -151,6 +172,15 @@ other = "Оффлине"
 [offlineText]
 other = "Нисте повезани на Интернет, биће доступне само кеширане странице."
 # === offline ===
+
+# === GitHub Alert ===
+[alert]
+note = ""
+tip = ""
+important = ""
+warning = ""
+caution = ""
+# === GitHub Alert ===
 
 # === shortcodes/admonition.html ===
 [admonition]

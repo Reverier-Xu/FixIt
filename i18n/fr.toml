@@ -6,8 +6,8 @@
 [init]
 configurationError = "Erreur de configuration\nVous n'avez pas configuré la version de FixIt correctement. Voir https://fixit.lruihao.cn/documentation/basics/#theme-configuration"
 compatibilityError = "Erreur de compatibilité ({{ .From }} -> {{ .To }}):\nVous avez une mise à jour incompatible. Voir https://github.com/hugo-fixit/FixIt/releases"
-RCVersionWarn = "Vous utilisez une version de développement de FixIt. Veuillez considérer l'utilisation d'une version stable.\nVoir https://github.com/hugo-fixit/FixIt/releases"
-devEnvWarn = "L'environnement actuel est \"développement\". Le \"système de commentaires\", le \"CDN\" et la \"prise d'empreinte\" seront désactivés."
+devVersionWarn = "Vous utilisez une version de développement de FixIt. Veuillez considérer l'utilisation d'une version stable.\nVoir https://github.com/hugo-fixit/FixIt/releases"
+devEnvWarn = "L'environnement actuel est \"développement\". Le \"système de commentaires\", le \"PWA\", le \"CDN\" et la \"prise d'empreinte\" seront désactivés."
 quicklyUpgrade = "La mise à jour rapide utilise la commande: "
 # === init ===
 
@@ -15,10 +15,13 @@ quicklyUpgrade = "La mise à jour rapide utilise la commande: "
 [baseof]
 backToTop = "Retour en Haut"
 viewComments = "Afficher les Commentaires"
-noscript = "Le thème FixIt fonctionne mieux quand JavaScript est activé."
+noscript = "Ce site Web fonctionne mieux quand JavaScript est activé."
 # === baseof ===
 
 # === Taxonomy ===
+[archives]
+other = ""
+
 [allSome]
 other = "Tous les {{ .Some }}"
 
@@ -27,6 +30,12 @@ other = "Catégorie"
 
 [categories]
 other = "Catégories"
+
+[collection]
+other = ""
+
+[collections]
+other = ""
 
 [tag]
 other = "Tag"
@@ -45,6 +54,10 @@ recentlyUpdated = "Récemment Modifié"
 [section.totalWordCount]
 one = "Nombre de mots: 1"
 other = "Nombre de mots: {{ .Count }}"
+
+[section.archiveCounter]
+one = ""
+other = ""
 # === Section ===
 
 # === Pagination ===
@@ -81,8 +94,6 @@ searchPlaceholder = "Rechercher des titres, des contenus..."
 clear = "Effacer"
 cancel = "Annuler"
 noResultsFound = "Aucun résultat trouvé"
-lunrLanguageCode = "fr"
-lunrLanguageLib = "lib/lunr/lunr.fr.js"
 copyToClipboard = "Copier dans le presse-papiers"
 editLockTitle = "Verrouiller le bloc de code modifiable"
 editUnLockTitle = "Déverrouiller le bloc de code modifiable"
@@ -98,16 +109,18 @@ other = "Partager via"
 
 # === posts/single.html ===
 [single]
-contents= "Contenus"
-repost= "Reposter"
-publishedOnDate= "publié le {{ .Date }}"
-includedInCategories= "inclus dans {{ .Categories }}"
+contents = "Contenus"
+pin = ""
+repost = "Reposter"
+publishedOnDate = "publié le {{ .Date }}"
 views = "vues"
 comments = "commentaires"
 author = "Auteur"
 updatedOnDate = "Mis à jour le {{ .Date }}"
 readMarkdown = "Ouvrir le Markdown"
+viewSource = ""
 editThisPage = "Modifier cette page"
+reportIssue = ""
 back = "Retour"
 home = "Accueil"
 readMore = "En savoir plus"
@@ -115,7 +128,14 @@ expirationReminder = "Cet article a été mis à jour pour la dernière fois le 
 encryptedAbstract = "Cet article a été chiffré, son contenu n'est donc pas lisible!"
 encryptedMessage = "Entrer le mot de passe"
 password = "Mot de passe"
+enterBtn = "Entrer"
 encryptyAgain = "Chiffrer à nouveau"
+relatedContent = "Contenu lié"
+
+[single.includedIn]
+categories = "inclus dans {{ .Categories }}"
+collections = "inclus dans {{ .Collections }}"
+both = "inclus dans {{ .Categories }} et {{ .Collections }}"
 
 [single.wordCount]
 one = "1 mot"
@@ -151,6 +171,15 @@ other = "Hors ligne"
 [offlineText]
 other = "Vous n'êtes pas connecté à Internet, seules les pages mises en cache seront disponibles."
 # === offline ===
+
+# === GitHub Alert ===
+[alert]
+note = ""
+tip = ""
+important = ""
+warning = ""
+caution = ""
+# === GitHub Alert ===
 
 # === shortcodes/admonition.html ===
 [admonition]

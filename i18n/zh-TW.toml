@@ -6,8 +6,8 @@
 [init]
 configurationError = "配置文件錯誤\n您還沒有正確配置 FixIt 的版本參數。參考 https://fixit.lruihao.cn/zh-cn/documentation/basics/#theme-configuration"
 compatibilityError = "兼容性錯誤 ({{ .From }} -> {{ .To }}):\n您進行了一次不兼容的更新。参考 https://github.com/hugo-fixit/FixIt/releases"
-RCVersionWarn = "您正在使用開發版的 FixIt，請考慮使用穩定版。\n見 https://github.com/hugo-fixit/FixIt/releases"
-devEnvWarn = "當前運行環境是“development”。“評論系統”，“CDN”和“fingerprint”不會啟用。"
+devVersionWarn = "您正在使用開發版的 FixIt，請考慮使用穩定版。\n見 https://github.com/hugo-fixit/FixIt/releases"
+devEnvWarn = "當前運行環境是“development”。“評論系統”、“PWA”、“CDN”和“fingerprint”不會啟用。"
 quicklyUpgrade = "使用命令快速升級："
 # === init ===
 
@@ -15,10 +15,13 @@ quicklyUpgrade = "使用命令快速升級："
 [baseof]
 backToTop = "回到頂部"
 viewComments = "查看評論"
-noscript = "FixIt 主題在啟用 JavaScript 的情況下效果最佳。"
+noscript = "該網站在啟用 JavaScript 的情況下效果最佳。"
 # === baseof ===
 
 # === Taxonomy ===
+[archives]
+other = "歸檔"
+
 [allSome]
 other = "所有{{ .Some }}"
 
@@ -27,6 +30,12 @@ other = "分類"
 
 [categories]
 other = "分類"
+
+[collection]
+other = "合集"
+
+[collections]
+other = "合集"
 
 [tag]
 other = "標籤"
@@ -44,6 +53,9 @@ recentlyUpdated = "最近更新"
 
 [section.totalWordCount]
 other = "總計約 {{ .Count }} 字"
+
+[section.archiveCounter]
+other = "共計 {{ .Count }} 篇文章"
 # === Section ===
 
 # === Pagination ===
@@ -80,9 +92,6 @@ searchPlaceholder = "搜尋文章標題或內容……"
 clear = "清除"
 cancel = "取消"
 noResultsFound = "沒有找到結果"
-lunrLanguageCode = "zh" # 不支持繁體中文
-lunrLanguageLib = "lib/lunr/lunr.zh.js"
-lunrSegmentitLib = "lib/lunr/lunr.segmentit.js"
 copyToClipboard = "複製到剪貼板"
 editLockTitle = "鎖定可編輯代碼塊"
 editUnLockTitle = "解鎖可編輯代碼塊"
@@ -98,16 +107,18 @@ other = "分享到"
 
 # === posts/single.html ===
 [single]
-contents= "目錄"
-repost= "轉貼"
-publishedOnDate= "發佈於 {{ .Date }}"
-includedInCategories= "收錄於 {{ .Categories }}"
+contents = "目錄"
+pin = "置頂"
+repost = "轉貼"
+publishedOnDate = "發佈於 {{ .Date }}"
 views = "次閱讀"
 comments = "條評論"
 author = "作者"
 updatedOnDate = "更新於 {{ .Date }}"
 readMarkdown = "閱讀原始文檔"
+viewSource = "查看原始碼"
 editThisPage = "編輯此頁"
+reportIssue = "報告問題"
 back = "返回"
 home = "主頁"
 readMore = "閱讀全文"
@@ -115,7 +126,14 @@ expirationReminder = "本文最後更新於 {{ .Date }}，文中內容可能已�
 encryptedAbstract = "本文已加密，囙此其原始內容不可見！"
 encryptedMessage = "請輸入密碼"
 password = "密碼"
+enterBtn = "進入"
 encryptyAgain = "重新加密"
+relatedContent = "相關內容"
+
+[single.includedIn]
+categories = "收錄於 {{ .Categories }}"
+collections = "收錄於 {{ .Collections }}"
+both = "收錄於 {{ .Categories }} 和 {{ .Collections }}"
 
 [single.wordCount]
 other = "{{ .Count }} 字"
@@ -149,6 +167,15 @@ other = "離線"
 [offlineText]
 other = "您沒有連接到 Internet，只有緩存的頁面可用。"
 # === offline ===
+
+# === GitHub Alert ===
+[alert]
+note = "注意"
+tip = "提示"
+important = "重要"
+warning = "警告"
+caution = "小心"
+# === GitHub Alert ===
 
 # === shortcodes/admonition.html ===
 [admonition]
