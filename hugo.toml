@@ -316,15 +316,13 @@ enableEmoji = true
 
 [params]
   # FixIt 0.2.15 | CHANGED FixIt theme version
-  version = "0.3.X" # e.g. "0.2.X", "0.2.15", "v0.2.15" etc.
+  version = "0.3.11" # e.g. "0.2.X", "0.2.15", "v0.2.15" etc.
   # site description
   description = "Creating reality with idealism."
   # site keywords
   keywords = []
   # site default theme ["light", "dark", "auto"]
   defaultTheme = "auto"
-  # public git repo url only then enableGitInfo is true
-  gitRepo = "https://github.com/Reverier-Xu"
   # FixIt 0.1.1 | NEW which hash function used for SRI, when empty, no SRI is used
   # ["sha256", "sha384", "sha512", "md5"]
   fingerprint = "sha256"
@@ -358,7 +356,7 @@ enableEmoji = true
   # FixIt 0.3.0 | NEW public Git repository information only then enableGitInfo is true
   [params.gitInfo]
     # e.g. "https://github.com/hugo-fixit/docs"
-    repo = ""
+    repo = "https://github.com/Reverier-Xu"
     branch = "main"
     # the content directory path relative to the root of the repository
     dir = "content"
@@ -473,28 +471,28 @@ enableEmoji = true
     # FixIt 0.2.12 | NEW Public network security only in China (HTML format is supported)
     gov = ""
     # ICP info only in China (HTML format is supported)
-    icp = "<a href=\"https://beian.miit.gov.cn/\">豫ICP备20023182号-2</a> | <a href=\"https://icp.gov.moe/?keyword=20243307\" target=\"_blank\">萌ICP备20243307号</a>"
+    icp = "&nbsp;| <a href=\"https://beian.miit.gov.cn/\">豫ICP备20023182号-2</a> | <a href=\"https://icp.gov.moe/?keyword=20243307\" target=\"_blank\">萌ICP备20243307号</a>"
     # license info (HTML format is supported)
     license = ""
     # FixIt 0.3.0 | NEW whether to show Hugo and theme info
     [params.footer.powered]
-      enable = true
+      enable = false
       hugoLogo = true
       themeLogo = true
     # FixIt 0.2.17 | CHANGED Site creation time
     [params.footer.siteTime]
       enable = false
-      animate = false
+      animate = true
       icon = ""
       pre = ""
       value = "2019-08-18T16:15:22+08:00" # e.g. "2021-12-18T16:15:22+08:00"
     # FixIt 0.2.17 | NEW footer lines order, optional values: ["first", 0, 1, 2, 3, 4, 5, "last"]
     [params.footer.order]
       powered = 0
-      copyright = 0
+      copyright = 2
       statistics = 0
       visitor = 0
-      beian = 0
+      beian = 3
 
   # FixIt 0.3.0 | NEW Archives page config (all pages of posts type)
   [params.archives]
@@ -874,7 +872,7 @@ enableEmoji = true
     # FixIt 0.3.0 | NEW whether to show link to view source code of the post
     linkToSource = true
     # FixIt 0.3.0 | NEW whether to show link to edit the post
-    linkToEdit = true
+    linkToEdit = false
     # FixIt 0.3.0 | NEW whether to show link to report issue for the post
     linkToReport = true
     # FixIt 0.3.10 | CHANGED Page style ["narrow", "normal", "wide", ...]
