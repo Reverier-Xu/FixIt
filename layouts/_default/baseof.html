@@ -1,4 +1,5 @@
 {{- partial "init/index.html" . -}}
+{{- partial "custom.html" . -}}
 
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/WebPage" lang="{{ .Site.LanguageCode }}">
@@ -14,6 +15,8 @@
     {{- partial "head/meta.html" . -}}
     {{- partial "head/link.html" . -}}
     {{- partial "head/seo.html" . -}}
+    {{- /* Custom head */ -}}
+    {{- block "custom-head" . }}{{ end -}}
   </head>
   <body data-header-desktop="{{ .Site.Params.header.desktopMode }}" data-header-mobile="{{ .Site.Params.header.mobileMode }}">
     {{- /* Check theme isDark before body rendering */ -}}
@@ -21,14 +24,14 @@
     <script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('{{ $theme }}' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '{{ $theme }}' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script>
 
     {{- /* Body wrapper */ -}}
-    <div class="wrapper" data-page-style="{{ (.Scratch.Get `params`).pageStyle | default `normal` }}">
+    <div class="wrapper" data-page-style="{{ (partial `function/params.html`).pageStyle | default `normal` }}">
       {{- partial "header.html" . -}}
       {{- partial "breadcrumb.html" . -}}
       {{- $toc := .Scratch.Get "toc" -}}
       <main class="container{{ if (eq $toc.enable true) | and (eq $toc.position `left`) }} container-reverse{{ end }}">
         {{- block "content" . }}{{ end -}}
       </main>
-      {{- partial "footer.html" . -}}
+      {{- partialCached "footer.html" . -}}
     </div>
 
     {{- /* Theme widgets */ -}}

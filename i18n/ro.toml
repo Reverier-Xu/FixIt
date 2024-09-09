@@ -7,7 +7,7 @@
 [init]
 configurationError = ""
 compatibilityError = ""
-RCVersionWarn = ""
+devVersionWarn = ""
 devEnvWarn = ""
 quicklyUpgrade = ""
 # === init ===
@@ -20,6 +20,9 @@ noscript = ""
 # === baseof ===
 
 # === Taxonomy ===
+[archives]
+other = ""
+
 [allSome]
 other = "Toate {{ .Some }}"
 
@@ -28,6 +31,12 @@ other = "Categorie"
 
 [categories]
 other = "Categorii"
+
+[collection]
+other = ""
+
+[collections]
+other = ""
 
 [tag]
 other = "Etichetă"
@@ -44,6 +53,10 @@ other = "Articole"
 recentlyUpdated = "Actualizat recent"
 
 [section.totalWordCount]
+one = ""
+other = ""
+
+[section.archiveCounter]
 one = ""
 other = ""
 # === Section ===
@@ -82,8 +95,6 @@ searchPlaceholder = "Căutarea titlului sau conținutului articolului ..."
 clear = "Golire"
 cancel = "Anulare"
 noResultsFound = "Nici un rezultat gasit"
-lunrLanguageCode = "ro"
-lunrLanguageLib = "lib/lunr/lunr.ro.js"
 copyToClipboard = "Copiați în clipboard"
 editLockTitle = "Blocați blocul de cod editabil"
 editUnLockTitle = "Deblocați blocul de cod editabil"
@@ -99,16 +110,18 @@ other = "Distribuie pe"
 
 # === posts/single.html ===
 [single]
-contents= "Cuprins"
-repost= ""
-publishedOnDate= "publicat la {{ .Date }}"
-includedInCategories= "inclus în {{ .Categories }}"
+contents = "Cuprins"
+pin = ""
+repost = ""
+publishedOnDate = "publicat la {{ .Date }}"
 views = "vizualizări"
 comments = "comentarii"
 author = "Autor"
 updatedOnDate = "Actualizat la {{ .Date }}"
 readMarkdown = "Citire Markdown"
+viewSource = ""
 editThisPage = "Editați această pagină"
+reportIssue = ""
 back = "Înapoi"
 home = "Acasă"
 readMore = "Citește mai mult"
@@ -116,7 +129,14 @@ expirationReminder = "Acest articol a fost actualizat ultima dată pe {{ .Date }
 encryptedAbstract = ""
 encryptedMessage = ""
 password = "Parolă"
+enterBtn = ""
 encryptyAgain = ""
+relatedContent = "Conținut înrudit"
+
+[single.includedIn]
+categories = "inclus în {{ .Categories }}"
+collections = "inclus în {{ .Collections }}"
+both = "inclus în {{ .Categories }} și {{ .Collections }}"
 
 [single.wordCount]
 one = "Un cuvânt"
@@ -152,6 +172,15 @@ other = "Deconectat"
 [offlineText]
 other = "Nu sunteți conectat la Internet, vor fi disponibile doar paginile stocate în cache."
 # === offline ===
+
+# === GitHub Alert ===
+[alert]
+note = ""
+tip = ""
+important = ""
+warning = ""
+caution = ""
+# === GitHub Alert ===
 
 # === shortcodes/admonition.html ===
 [admonition]

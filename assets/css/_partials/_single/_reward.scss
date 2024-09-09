@@ -3,10 +3,6 @@
   text-align: center;
   @extend .print-d-none;
 
-  &~.post-footer {
-    margin-top: 0;
-  }
-
   &:has(.reward-ways:empty) {
     display: none;
   }

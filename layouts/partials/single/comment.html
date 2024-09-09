@@ -15,18 +15,22 @@
     {{- $artalk := $comment.artalk | default dict -}}
     {{- if $artalk.enable -}}
       <div id="artalk" class="comment"></div>
-      {{- $source := $cdn.artalkCSS | default "lib/artalk/Artalk.css" -}}
+      {{- $source := $cdn.artalkCSS | default (add $artalk.server "/dist/Artalk.css") -}}
       {{- dict "Source" $source "Minify" true "Fingerprint" $fingerprint | dict "Scratch" .Scratch "Data" | partial "scratch/style.html" -}}
-      {{- $source := $cdn.artalkJS | default "lib/artalk/Artalk.js" -}}
+      {{- $source := $cdn.artalkJS | default (add $artalk.server "/dist/Artalk.js") -}}
       {{- dict "Source" $source "Fingerprint" $fingerprint | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
       {{- $commentConfig = dict "el" "#artalk" "pageKey" .Permalink "pageTitle" .Title "pvEl" "artalk-visitor-count" "countEl" "artalk-comment-count" | dict "artalk" | merge $commentConfig -}}
       {{- if (eq $artalk.locale "") | and (eq $.Site.LanguageCode "en") -}}
         {{- $artalk = dict "locale" "en-US" | merge $artalk -}}
       {{- end -}}
       {{- $commentConfig = dict "locale" ($artalk.locale | default $.Site.LanguageCode | default "auto") | dict "artalk" | merge $commentConfig -}}
+      {{- if eq $artalk.usebackendconf false -}}
+        {{- $commentConfig = dict "useBackendConf" false | dict "artalk" | merge $commentConfig -}}
+      {{- end -}}
       {{- with .Site.Params.gravatar -}}
         {{/* See https://artalk.js.org/guide/frontend/config.html#gravatar-params */}}
-        {{- $commentConfig = dict "mirror" .Host "params" (printf "d=%v&s=240" .Style) | dict "gravatar" | dict "artalk" | merge $commentConfig -}}
+        {{- $gravatarMirror := printf "https://%v/avatar/" .Host -}}
+        {{- $commentConfig = dict "mirror" $gravatarMirror "params" (printf "d=%v&s=240" .Style) | dict "gravatar" | dict "artalk" | merge $commentConfig -}}
       {{- end -}}
       {{- with $artalk.server -}}
         {{- $commentConfig = dict "server" . | dict "artalk" | merge $commentConfig -}}
@@ -190,6 +194,9 @@
       {{- with $waline.recaptchaV3Key -}}
         {{- $commentConfig = dict "recaptchaV3Key" . | dict "waline" | merge $commentConfig -}}
       {{- end -}}
+      {{- with $waline.turnstileKey -}}
+        {{- $commentConfig = dict "turnstileKey" . | dict "waline" | merge $commentConfig -}}
+      {{- end -}}
       {{- with $waline.reaction -}}
         {{- $commentConfig = dict "reaction" . | dict "waline" | merge $commentConfig -}}
       {{- end -}}
@@ -295,11 +302,12 @@
     {{- $giscus := $comment.giscus | default dict -}}
     {{- if $giscus.enable -}}
       {{- with $giscus -}}
+        {{- $commentConfig = .origin | default "https://giscus.app" | dict "origin" | dict "giscus" | merge $commentConfig -}}
         {{- $commentConfig = .lightTheme | default "light" | dict "lightTheme" | dict "giscus" | merge $commentConfig -}}
         {{- $commentConfig = .darkTheme | default "dark" | dict "darkTheme" | dict "giscus" | merge $commentConfig -}}
-        <div id="giscus">
+        <div id="giscus" class="comment">
           <script
-            src="https://giscus.app/client.js"
+            src="{{ .Origin }}/client.js"
             data-repo="{{ .Repo }}"
             data-repo-id="{{ .RepoId }}"
             data-category="{{ .Category }}"
@@ -311,7 +319,7 @@
             data-reactions-enabled="{{ .ReactionsEnabled }}"
             data-emit-metadata="{{ .EmitMetadata }}"
             data-input-position="{{ .InputPosition }}"
-            data-lang="{{ $.Site.LanguageCode }}"
+            data-lang="{{ .lang | default $.Site.LanguageCode }}"
             {{ if ne .LazyLoad false }}data-loading="lazy"{{ end }}
             crossorigin="anonymous"
             async
@@ -323,9 +331,12 @@
         </noscript>
       {{- end -}}
     {{- end -}}
+
+    {{- /* Custom Comment System */ -}}
+    {{- block "custom-comment" . }}{{ end -}}
   </div>
   {{- /* lightgallery for Artalk and Twikoo */ -}}
-  {{- $params := .Scratch.Get "params" -}}
+  {{- $params := partial "function/params.html" -}}
   {{- if not $params.lightgallery | and (($artalk.enable | and $artalk.lightgallery) | or ($twikoo.enable | and $twikoo.lightgallery)) -}}
     {{- $source := $cdn.lightgalleryCSS | default "lib/lightgallery/css/lightgallery-bundle.min.css" -}}
     {{- dict "Source" $source "Fingerprint" $fingerprint | dict "Scratch" .Scratch "Data" | partial "scratch/style.html" -}}

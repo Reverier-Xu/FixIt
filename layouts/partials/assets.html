@@ -1,7 +1,8 @@
-{{- $params := .Scratch.Get "params" -}}
+{{- $params := partial "function/params.html" -}}
 {{- $cdn := .Scratch.Get "cdn" | default dict -}}
 {{- $fingerprint := .Scratch.Get "fingerprint" -}}
 {{- $config := (.Scratch.Get "this").config -}}
+{{- $config = dict "version" (.Scratch.Get "version") | merge $config -}}
 
 {{- /* Search */ -}}
 {{- if .Site.Params.search | and .Site.Params.search.enable -}}
@@ -10,26 +11,12 @@
   {{- $source := $cdn.autocompleteJS | default "lib/autocomplete/autocomplete.min.js" -}}
   {{- dict "Source" $source "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
   {{- $config = dict "maxResultLength" $search.maxResultLength "snippetLength" $search.snippetLength "highlightTag" $search.highlightTag "noResultsFound" (T "assets.noResultsFound") | dict "search" | merge $config -}}
-  {{- if eq $search.type "lunr" -}}
-    {{- with .Site.Home.OutputFormats.Get "json" -}}
-      {{- $config = dict "type" "lunr" "lunrIndexURL" .RelPermalink | dict "search" | merge $config -}}
-    {{- end -}}
-    {{- $source := $cdn.lunrJS | default "lib/lunr/lunr.min.js" -}}
-    {{- dict "Source" $source "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-    {{- if T "assets.lunrLanguageLib" -}}
-      {{- $config = T "assets.lunrLanguageCode" | dict "lunrLanguageCode" | dict "search" | merge $config -}}
-      {{- with T "assets.lunrSegmentitLib" -}}
-        {{- $config = dict "lunrSegmentitURL" (resources.Get .).RelPermalink | dict "search" | merge $config -}}
-      {{- end -}}
-      {{- dict "Source" "lib/lunr/lunr.stemmer.support.js" "Minify" true "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-      {{- dict "Source" (T "assets.lunrLanguageLib") "Minify" true "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-    {{- end -}}
-  {{- else if eq $search.type "algolia" -}}
+  {{- if eq $search.type "algolia" -}}
     {{- $source := $cdn.algoliasearchJS | default "lib/algoliasearch/algoliasearch-lite.umd.min.js" -}}
     {{- dict "Source" $source "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
     {{- $config = dict "type" "algolia" "algoliaIndex" $search.algolia.index "algoliaAppID" $search.algolia.appID "algoliaSearchKey" $search.algolia.searchKey | dict "search" | merge $config -}}
   {{- else if eq $search.type "fuse" -}}
-    {{- with .Site.Home.OutputFormats.Get "json" -}}
+    {{- with .Site.Home.OutputFormats.Get "search" -}}
       {{- $config = dict "type" "fuse" "fuseIndexURL" .RelPermalink | dict "search" | merge $config -}}
     {{- end -}}
     {{- $source := $cdn.fuseJS | default "lib/fuse/fuse.min.js" -}}
@@ -64,17 +51,16 @@
   {{- $config = dict "lightgallery" true | merge $config -}}
 {{- end -}}
 
+{{- /* Code wrapper */ -}}
 {{- $code := $params.code | default dict -}}
-{{- $config = cond (ne $code.maxShownLines nil) $code.maxShownLines 10 | dict "maxShownLines" | dict "code" | merge $config -}}
-
-{{- /* edit code */ -}}
-{{- if ne $code.edit false -}}
-  {{- $config = dict "editable" true "editLockTitle" (T "assets.editLockTitle") "editUnLockTitle" (T "assets.editUnLockTitle") | dict "code" | merge $config -}}
-{{- end -}}
-
-{{- /* copy code */ -}}
-{{- if ne $code.copy false -}}
-  {{- $config = T "assets.copyToClipboard" | dict "copyTitle" | dict "code" | merge $config -}}
+{{- if $code.enable -}}
+  {{- $config = $code.maxShownLines | dict "maxShownLines" | dict "code" | merge $config -}}
+  {{- if ne $code.edit false -}}
+    {{- $config = dict "editable" true "editLockTitle" (T "assets.editLockTitle") "editUnLockTitle" (T "assets.editUnLockTitle") | dict "code" | merge $config -}}
+  {{- end -}}
+  {{- if ne $code.copy false -}}
+    {{- $config = T "assets.copyToClipboard" | dict "copyTitle" | dict "code" | merge $config -}}
+  {{- end -}}
 {{- end -}}
 
 {{- /* Sharer.js */ -}}
@@ -84,11 +70,11 @@
 {{- end -}}
 
 {{- /* TypeIt */ -}}
-{{- with (.Scratch.Get "this").typeitMap -}}
-  {{- $typeit := $.Site.Params.typeit -}}
+{{- if .Store.Get "hasTyped" -}}
+  {{- $typeit := .Site.Params.typeit -}}
   {{- $source := $cdn.typeitJS | default "lib/typeit/index.umd.js" -}}
   {{- dict "Source" $source "Fingerprint" $fingerprint "Defer" true | dict "Scratch" $.Scratch "Data" | partial "scratch/script.html" -}}
-  {{- $config = dict "speed" $typeit.speed "cursorSpeed" $typeit.cursorSpeed "cursorChar" $typeit.cursorChar "duration" $typeit.duration "loop" $typeit.loop "data" . | dict "typeit" | merge $config -}}
+  {{- $config = dict "speed" $typeit.speed "cursorSpeed" $typeit.cursorSpeed "cursorChar" $typeit.cursorChar "duration" $typeit.duration "loop" $typeit.loop | dict "typeit" | merge $config -}}
 {{- end -}}
 
 {{- /* KaTeX */ -}}
@@ -128,15 +114,16 @@
 {{- end -}}
 
 {{- /* mermaid */ -}}
-{{- if (.Scratch.Get "this").mermaid -}}
-  {{- $source := $cdn.mermaidJS | default "lib/mermaid/mermaid.min.js" -}}
-  {{- dict "Source" $source "Fingerprint" $fingerprint | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-  {{- $mermaid := .Site.Params.mermaid -}}
-  {{- $config = dict "themes" $mermaid.themes | dict "mermaid" | merge $config -}}
+{{- if .Store.Get "hasMermaid" -}}
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    window.mermaid = mermaid;
+    window.mermaid.themes = {{ .Site.Params.mermaid.themes }};
+  </script>
 {{- end -}}
 
 {{- /* ECharts */ -}}
-{{- if (.Scratch.Get "this").echarts -}}
+{{- if .Store.Get "hasEcharts" -}}
   {{- $source := $cdn.echartsJS | default "lib/echarts/echarts.min.js" -}}
   {{- dict "Source" $source "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
   {{- $lightTheme := resources.Get "lib/echarts/theme/light.yml" | transform.Unmarshal -}}
@@ -145,7 +132,7 @@
 {{- end -}}
 
 {{- /* Mapbox GL */ -}}
-{{- if (.Scratch.Get "this").mapbox -}}
+{{- if .HasShortcode "mapbox" -}}
   {{- $source := $cdn.mapboxGLCSS | default "lib/mapbox-gl/mapbox-gl.css" -}}
   {{- dict "Source" $source "Minify" true "Fingerprint" $fingerprint "Preload" true | dict "Scratch" .Scratch "Data" | partial "scratch/style.html" -}}
   {{- $source = $cdn.mapboxGLJS | default "lib/mapbox-gl/mapbox-gl.js" -}}
@@ -155,7 +142,7 @@
 {{- end -}}
 
 {{- /* Music */ -}}
-{{- if (.Scratch.Get "this").music -}}
+{{- if .HasShortcode "music" -}}
   {{- /* APlayer */ -}}
   {{- $source := $cdn.aplayerCSS | default "lib/aplayer/APlayer.min.css" -}}
   {{- dict "Source" $source "Fingerprint" $fingerprint "Preload" true | dict "Scratch" .Scratch "Data" | partial "scratch/style.html" -}}
@@ -197,34 +184,28 @@
 {{- end -}}
 
 {{- /* Content Decryption */ -}}
-{{- $encryptPartial := (.Scratch.Get "this").encryptPartial -}}
+{{- $encryptPartial := .HasShortcode "fixit-encryptor" -}}
 {{- if $params.password | or $encryptPartial -}}
   {{- $cryptoCoreJS := $cdn.cryptoCoreJS | default "lib/crypto-js/core.js" -}}
   {{- $cryptoEncBase64JS := $cdn.cryptoEncBase64JS | default "lib/crypto-js/enc-base64.js" -}}
-  {{- $cryptoMd5JS := $cdn.cryptoMd5JS | default "lib/crypto-js/md5.js" -}}
   {{- $cryptoSha256JS := $cdn.cryptoSha256JS | default "lib/crypto-js/sha256.js" -}}
+  {{- $xxhashWasmJS := $cdn.xxhashWasmJS | default "lib/xxhash-wasm/xxhash-wasm.js" -}}
   {{- dict "Source" $cryptoCoreJS "Minify" true "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
   {{- dict "Source" $cryptoEncBase64JS "Minify" true "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-  {{- dict "Source" $cryptoMd5JS "Minify" true "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
   {{- dict "Source" $cryptoSha256JS "Minify" true "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-  {{- dict "Source" "js/fixit-decryptor.js" "Minify" hugo.IsProduction "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+  {{- dict "Source" $xxhashWasmJS "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+  {{- /* Decryption script */ -}}
+  {{- $options := dict "targetPath" "js/fixit-decryptor.min.js" "minify" hugo.IsProduction -}}
+  {{- if not hugo.IsProduction -}}
+    {{- $options = dict "sourceMap" "external" | merge $options -}}
+  {{- end -}}
+  {{- dict "Source" (resources.Get "js/fixit-decryptor.js") "Build" $options "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
   {{- $config = dict "all" (isset $params "password") "shortcode" ($encryptPartial | default false) | dict "encryption" | merge $config -}}
 {{- end -}}
 
-{{- /* Mobile Devtools */ -}}
-{{- $mDevtools := (.Scratch.Get "devOpts").mDevtools -}}
-{{- if $mDevtools.enable -}}
-  {{- $devtoolsJS := $cdn.vconsoleJS | default "lib/vconsole/vconsole.min.js" -}}
-  {{- if eq $mDevtools.type "eruda" -}}
-    {{- $devtoolsJS = $cdn.erudaJS | default "lib/eruda/eruda.js" -}}
-  {{- end -}}
-  {{- dict "Source" $devtoolsJS "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-  {{- $config = dict "mDevtools" ($mDevtools.type | default "vConsole") | merge $config -}}
-{{- end -}}
-
 {{- /* 不蒜子 */ -}}
-{{- if eq .Site.Params.ibruce.enable true -}}
-  {{- $source := "//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" -}}
+{{- if .Site.Params.busuanzi.enable | and hugo.IsProduction -}}
+  {{- $source := .Site.Params.busuanzi.source | default "https://vercount.one/js" -}}
   {{- dict "Source" $source "Fingerprint" $fingerprint "Async" true "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
 {{- end -}}
 
@@ -237,7 +218,7 @@
 {{- end -}}
 
 {{- /* PWA */ -}}
-{{- if .Site.Params.enablePWA | and hugo.IsProduction -}}
+{{- if not hugo.IsServer | and .Site.Params.enablePWA | and hugo.IsProduction -}}
   {{- $options := dict "targetPath" "service-worker.min.js" "minify" true -}}
   {{- $source := resources.Get "js/service-worker.js" | js.Build $options -}}
   {{- $_ := $source.RelPermalink -}}
@@ -290,13 +271,21 @@
 {{- $config | jsonify | printf "window.config=%s;" | dict "Content" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
 
 {{- /* Theme script */ -}}
-{{- /* TODO migrate to js.build in hugo future version */ -}}
-{{- dict "Source" "js/theme.min.js" "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-{{- $_ := (resources.Get "js/theme.min.js.map").RelPermalink -}}
+{{- $options := dict "targetPath" "js/theme.min.js" "minify" hugo.IsProduction -}}
+{{- if not hugo.IsProduction -}}
+  {{- $options = dict "sourceMap" "external" | merge $options -}}
+{{- end -}}
+{{- dict "Source" (resources.Get "js/theme.js") "Build" $options "Fingerprint" $fingerprint "Defer" true | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+
+{{- /* Custom Assets */ -}}
+{{- block "custom-assets" . }}{{ end -}}
 
 {{- /* Custom script */ -}}
 {{- with ((resources.Get "js/custom.js") | default (resources.Get "js/_custom.js")) -}}
-  {{- $options := dict "targetPath" "js/custom.min.js" "minify" true "sourceMap" "inline" -}}
+  {{- $options := dict "targetPath" "js/custom.min.js" "minify" hugo.IsProduction -}}
+  {{- if not hugo.IsProduction -}}
+    {{- $options = dict "sourceMap" "inline" | merge $options -}}
+  {{- end -}}
   {{- dict "Source" . "Build" $options "Fingerprint" $fingerprint "Defer" true | dict "Scratch" $.Scratch "Data" | partial "scratch/script.html" -}}
 {{- end -}}
 

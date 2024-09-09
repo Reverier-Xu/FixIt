@@ -1,6 +1,6 @@
 {{- /* FixIt theme environment detection */ -}}
 
-{{- $params := .Scratch.Get "params" -}}
+{{- $params := partial "function/params.html" -}}
 
 {{- if hugo.IsProduction -}}
   {{- $cdn := .Site.Params.cdn -}}
@@ -26,7 +26,7 @@
   {{- if ne .Site.Params.dev.enable true -}}
     {{- .Scratch.Set "devOpts" dict -}}
   {{- end -}}
-  {{- if eq .Site .Sites.First -}}
+  {{- if eq .Site .Sites.Default -}}
     {{- warnf "FixIt %v\n%v\n\n" (.Scratch.Get "version") (T "init.devEnvWarn") -}}
   {{- end -}}
 {{- end -}}

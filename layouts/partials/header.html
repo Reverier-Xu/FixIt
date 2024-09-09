@@ -1,38 +1,37 @@
 {{- $buildDrafts := .Site.BuildDrafts -}}
+{{- $homeRelPermalink := .Scratch.Get "homeRelPermalink" -}}
 
 {{- /* Desktop header */ -}}
 <header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper"{{ if .Site.Params.githubCorner.enable }} data-github-corner="{{ .Site.Params.githubCorner.position }}"{{ end }}>
     <div class="header-title">
-      <a href="{{ .Site.Home.RelPermalink }}" title="{{ .Site.Title }}">
+      <a href="{{ $homeRelPermalink }}" title="{{ .Site.Title }}">
         {{- with .Site.Params.header.title -}}
           {{- with .logo -}}
-            {{- dict "Src" . "Class" "logo" "Alt" $.Site.Title | partial "plugin/image.html" -}}
+            {{- dict "Src" . "Class" "logo" "Alt" $.Site.Title "Width" 26 "Height" 26 | partial "plugin/image.html" -}}
           {{- end -}}
           {{- with .pre -}}
             <span class="header-title-pre">{{ . | safeHTML }}</span>
           {{- end -}}
           {{- if .typeit -}}
-            {{- $id := dict "Content" .name "Scratch" $.Scratch "Id" "typeit-header-desktop" | partial "function/id.html" -}}
-            <span id="{{ $id }}" class="typeit"></span>
-            {{- dict $id (slice $id) | dict "typeitMap" | merge ($.Scratch.Get "this") | $.Scratch.Set "this" -}}
+            {{- $.Store.Set "hasTyped" true -}}
+            <span class="typeit"><template>{{ .name | default $.Site.Title }}</template></span>
           {{- else -}}
-            <span class="header-title-text">{{- .name -}}</span>
+            <span class="header-title-text">{{ .name | default $.Site.Title }}</span>
           {{- end -}}
           {{- with .post -}}
             <span class="header-title-post">{{ . | safeHTML }}</span>
           {{- end -}}
         {{- else -}}
-          <span class="header-title-text">{{- .Site.Title -}}</span>
+          <span class="header-title-text">{{ .Site.Title }}</span>
         {{- end -}}
       </a>
       {{- with .Site.Params.header.subtitle -}}
         {{- if .typeit -}}
-          {{- $id := dict "Content" .name "Scratch" $.Scratch "Id" "typeit-header-subtitle-desktop" | partial "function/id.html" -}}
-          <span id="{{ $id }}" class="typeit header-subtitle"></span>
-          {{- dict $id (slice $id) | dict "typeitMap" | merge ($.Scratch.Get "this") | $.Scratch.Set "this" -}}
+        {{- $.Store.Set "hasTyped" true -}}
+          <span class="typeit header-subtitle"><template>{{ .name }}</template></span>
         {{- else -}}
-          <span class="header-subtitle">{{- .name -}}</span>
+          <span class="header-subtitle">{{ .name }}</span>
         {{- end -}}
       {{- end -}}
     </div>
@@ -59,25 +58,28 @@
               {{- if .HasChildren -}}
                 {{ dict "Class" "dropdown-icon fa-solid fa-chevron-down" | partial "plugin/icon.html" }}
                 <ul class="sub-menu">
-                  {{ range .Children }}
-                    {{- $url := .URL | relLangURL -}}
-                    {{- with .Page -}}
+                  {{- range $k, $v := .Children -}}
+                    {{- $url := $v.URL | relLangURL -}}
+                    {{- with $v.Page -}}
                       {{- $url = .RelPermalink -}}
                     {{- end -}}
-                    {{- if (ne .Params.Draft true) | or $buildDrafts | and (ne .Params.Type "mobile") -}}
+                    {{- if (ne $v.Params.Draft true) | or $buildDrafts | and (ne $v.Params.Type "mobile") -}}
+                      {{- if $k | and $v.Params.Divided -}}
+                        <li class="menu-item-divider" aria-hidden="true"></li>
+                      {{- end -}}
                       <li
-                        class="menu-item{{ if $.IsMenuCurrent `main` . | or ($.HasMenuCurrent `main` .) | or (eq $.RelPermalink $url) }} active{{ end }}{{ with .Params.Class }} {{ . }}{{ end }}"
+                        class="menu-item{{ if $.IsMenuCurrent `main` $v | or ($.HasMenuCurrent `main` $v) | or (eq $.RelPermalink $url) }} active{{ end }}{{ with $v.Params.Class }} {{ . }}{{ end }}"
                       >
                         <a
                           class="menu-link"
                           href="{{ $url }}"
-                          {{ with .Title }}title="{{ . }}"{{ end }}
+                          {{ with $v.Title }}title="{{ . }}"{{ end }}
                           {{ if (urls.Parse $url).Host }}rel="noopener noreferrer" target="_blank"{{ end }}
                         >
-                          {{- with .Pre -}}{{- . | safeHTML }} {{ end }}
-                          {{- with .Params.Icon -}}{{ dict "Class" (printf "%v fa-fw fa-sm" .) | partial "plugin/icon.html" }} {{ end }}
-                          {{- .Name }}
-                          {{- with .Post }} {{ . | safeHTML -}}{{- end -}}
+                          {{- with $v.Pre -}}{{- . | safeHTML }} {{ end }}
+                          {{- with $v.Params.Icon -}}{{ dict "Class" (printf "%v fa-fw fa-sm" .) | partial "plugin/icon.html" }} {{ end }}
+                          {{- $v.Name }}
+                          {{- with $v.Post }} {{ . | safeHTML -}}{{- end -}}
                         </a>
                       </li>
                     {{- end -}}
@@ -107,7 +109,7 @@
         <li class="menu-item theme-switch" title="{{ T "header.switchTheme" }}">
           [T]
         </li>
-        {{- if .Site.IsMultiLingual -}}
+        {{- if hugo.IsMultilingual -}}
           <li class="menu-item language-switch">
             <span role="button" aria-label="{{ T "header.selectLanguage" }}" title="{{ T "header.selectLanguage" }}">
               {{- dict "Class" "fa-solid fa-language fa-fw" | partial "plugin/icon.html" -}}
@@ -124,7 +126,7 @@
                     </li>
                   {{- end -}}
                 {{- end -}}
-              {{- else if gt (len .AllTranslations) 1 -}}
+              {{- else if .IsTranslated -}}
                 {{- range .AllTranslations -}}
                   {{- if ne .Lang $.Lang -}}
                     <li class="menu-item">
@@ -154,33 +156,31 @@
   <div class="header-container">
     <div class="header-wrapper">
       <div class="header-title">
-        <a href="{{ .Site.Home.RelPermalink }}" title="{{ .Site.Title }}">
+        <a href="{{ $homeRelPermalink }}" title="{{ .Site.Title }}">
           {{- with .Site.Params.header.title -}}
             {{- with .logo -}}
-              {{- dict "Src" . "Class" "logo" | partial "plugin/image.html" -}}
+              {{- dict "Src" . "Class" "logo" "Alt" $.Site.Title "Width" 26 "Height" 26 | partial "plugin/image.html" -}}
             {{- end -}}
             {{- with .pre -}}
               <span class="header-title-pre">{{ . | safeHTML }}</span>
             {{- end -}}
             {{- if .typeit -}}
-              {{- $id := dict "Content" .name "Scratch" $.Scratch "Id" "typeit-header-title-mobile" | partial "function/id.html" -}}
-              <span id="{{ $id }}" class="typeit"></span>
-              {{- dict $id (slice $id) | dict "typeitMap" | merge ($.Scratch.Get "this") | $.Scratch.Set "this" -}}
+              {{- $.Store.Set "hasTyped" true -}}
+              <span class="typeit"><template>{{ .name | default $.Site.Title }}</template></span>
             {{- else -}}
-              <span class="header-title-text">{{- .name -}}</span>
+              <span class="header-title-text">{{ .name | default $.Site.Title }}</span>
             {{- end -}}
             {{- with .post -}}
               <span class="header-title-post">{{ . | safeHTML }}</span>
             {{- end -}}
           {{- else -}}
-            <span class="header-title-text">{{- .Site.Title -}}</span>
+            <span class="header-title-text">{{ .Site.Title }}</span>
           {{- end -}}
         </a>
         {{- with .Site.Params.header.subtitle -}}
           {{- if .typeit -}}
-            {{- $id := dict "Content" .name "Scratch" $.Scratch "Id" "typeit-header-subtitle-mobile" | partial "function/id.html" -}}
-            <span id="{{ $id }}" class="typeit header-subtitle"></span>
-            {{- dict $id (slice $id) | dict "typeitMap" | merge ($.Scratch.Get "this") | $.Scratch.Set "this" -}}
+            {{- $.Store.Set "hasTyped" true -}}
+            <span class="typeit header-subtitle"><template>{{ .name }}</template></span>
           {{- else -}}
             <span class="header-subtitle">{{- .name -}}</span>
           {{- end -}}
@@ -237,25 +237,28 @@
                   {{ dict "Class" "dropdown-icon fa-solid fa-chevron-right" | partial "plugin/icon.html" }}
                 </span>
                 <ul class="sub-menu">
-                  {{ range .Children }}
-                    {{- $url := .URL | relLangURL -}}
-                    {{- with .Page -}}
+                  {{- range $k, $v := .Children -}}
+                    {{- $url := $v.URL | relLangURL -}}
+                    {{- with $v.Page -}}
                       {{- $url = .RelPermalink -}}
                     {{- end -}}
-                    {{- if (ne .Params.Draft true) | or $buildDrafts | and (ne .Params.Type "desktop") -}}
+                    {{- if (ne $v.Params.Draft true) | or $buildDrafts | and (ne $v.Params.Type "desktop") -}}
+                      {{- if $k | and $v.Params.Divided -}}
+                        <li class="menu-item menu-item-divider" aria-hidden="true"></li>
+                      {{- end -}}
                       <li
-                        class="menu-item{{ if $.IsMenuCurrent `main` . | or ($.HasMenuCurrent `main` .) | or (eq $.RelPermalink $url) }} active{{ end }}{{ with .Params.Class }} {{ . }}{{ end }}"
+                        class="menu-item{{ if $.IsMenuCurrent `main` $v | or ($.HasMenuCurrent `main` $v) | or (eq $.RelPermalink $url) }} active{{ end }}{{ with $v.Params.Class }} {{ . }}{{ end }}"
                       >
                         <a
                           class="menu-link"
                           href="{{ $url }}"
-                          {{ with .Title }}title="{{ . }}"{{ end }}
+                          {{ with $v.Title }}title="{{ . }}"{{ end }}
                           {{ if (urls.Parse $url).Host }}rel="noopener noreferrer" target="_blank"{{ end }}
                         >
-                          {{- with .Pre -}}{{- . | safeHTML }} {{ end }}
-                          {{- with .Params.Icon -}}{{ dict "Class" (printf "%v fa-fw fa-sm" .) | partial "plugin/icon.html" }} {{ end }}
-                          {{- .Name }}
-                          {{- with .Post }} {{ . | safeHTML -}}{{- end -}}
+                          {{- with $v.Pre -}}{{- . | safeHTML }} {{ end }}
+                          {{- with $v.Params.Icon -}}{{ dict "Class" (printf "%v fa-fw fa-sm" .) | partial "plugin/icon.html" }} {{ end }}
+                          {{- $v.Name }}
+                          {{- with $v.Post }} {{ . | safeHTML -}}{{- end -}}
                         </a>
                       </li>
                     {{- end -}}
@@ -279,7 +282,7 @@
         {{- end -}}
         <li class="menu-item menu-system">
           <span class="menu-system-item theme-switch" title="{{ T "header.switchTheme" }}">{{ dict "Class" "fa-solid fa-adjust fa-fw" | partial "plugin/icon.html" }}</span>
-          {{- if .Site.IsMultiLingual -}}
+          {{- if hugo.IsMultilingual -}}
             <span class="menu-system-item language-switch">
               <span role="button" aria-label="{{ T "header.selectLanguage" }}" title="{{ T "header.selectLanguage" }}">
                 {{- .Language.LanguageName -}}
