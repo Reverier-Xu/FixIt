@@ -1170,6 +1170,7 @@ enableEmoji = true
         # located in "assets/"
         # Or
         # someCSS = "https://cdn.example.com/some.css"
+        iosevkaCSS = "https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5.1.0/index.min.css"
       [params.page.library.js]
         # someJavascript = "some.js"
         # located in "assets/"
