@@ -444,6 +444,9 @@ enableEmoji = true
     enable = true
     sticky = true
     showHome = true
+    # FixIt 0.3.13 | NEW
+    separator = "/"
+    capitalize = true
 
   # FixIt 0.3.10 | NEW Post navigation config
   [params.navigation]
