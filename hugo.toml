@@ -135,7 +135,7 @@ enableEmoji = true
 [module]
   [module.hugoVersion]
     extended = true
-    min = "0.132.0"
+    min = "0.134.1"
 
 # -------------------------------------------------------------------------------------
 # Markup related configuration in Hugo
@@ -189,11 +189,6 @@ enableEmoji = true
       # whether to use HTML tags directly in the document
       unsafe = true
       xhtml = false
-  # Table Of Contents settings
-  [markup.tableOfContents]
-    ordered = false
-    startLevel = 2
-    endLevel = 6
 
 # -------------------------------------------------------------------------------------
 # Sitemap Configuration
@@ -202,6 +197,7 @@ enableEmoji = true
 
 [sitemap]
   changefreq = "weekly"
+  disable = false
   filename = "sitemap.xml"
   priority = 0.5
 
@@ -334,6 +330,8 @@ enableEmoji = true
   enablePWA = false
   # FixIt 0.2.14 | NEW whether to add external Icon for external links automatically
   externalIcon = false
+  # FixIt 0.3.13 | NEW whether to capitalize titles
+  capitalizeTitles = true
   # FixIt 0.3.0 | NEW whether to add site title to the title of every page
   # remember to set up your site title in `hugo.toml` (e.g. title = "title")
   withSiteTitle = true
@@ -342,6 +340,8 @@ enableEmoji = true
   # FixIt 0.3.0 | NEW whether to add site subtitle to the title of index page
   # remember to set up your site subtitle by `params.header.subtitle.name`
   indexWithSubtitle = false
+  # FixIt 0.3.13 | NEW whether to show summary in plain text
+  summaryPlainify = false
   # FixIt 0.2.14 | NEW FixIt will, by default, inject a theme meta tag in the HTML head on the home page only.
   # You can turn it off, but we would really appreciate if you don’t, as this is a good way to watch FixIt's popularity on the rise.
   disableThemeInject = false
@@ -513,13 +513,6 @@ enableEmoji = true
       limit = -1
       # whether to show the full text content in feed.
       fullText = false
-    # FixIt 0.2.13 | NEW recently updated pages config
-    # TODO refactor to support archives, section, taxonomy and term
-    [params.section.recentlyUpdated]
-      enable = false
-      rss = false
-      days = 30
-      maxCount = 10
 
   # Term list (category or tag) page config
   [params.list]
@@ -533,6 +526,14 @@ enableEmoji = true
       limit = -1
       # whether to show the full text content in feed.
       fullText = false
+
+  # FixIt 0.3.13 | NEW recently updated pages config for archives, section and term list
+  [params.recentlyUpdated]
+    archives = true
+    section = true
+    list = true
+    days = 30
+    maxCount = 10
 
   # FixIt 0.2.17 | NEW TagCloud config for tags page
   [params.tagcloud]
@@ -655,6 +656,7 @@ enableEmoji = true
     TryHackMe = ""
     Douyin = ""
     TikTok = ""
+    Credly = ""
     Phone = ""
     Email = ""
     RSS = true
@@ -684,6 +686,12 @@ enableEmoji = true
   [params.mermaid]
     # For values, see https://mermaid.js.org/config/theming.html#available-themes
     themes = ["default", "dark"]
+
+  # FixIt 0.3.13 | NEW Admonitions custom config
+  # See https://fixit.lruihao.cn/documentation/content-management/shortcodes/extended/admonition/#custom-admonitions
+  # syntax: <type> = <icon>
+  [params.admonition]
+    # ban = "fa-solid fa-ban"
 
   # FixIt 0.2.12 | NEW PanguJS config
   [params.pangu]
@@ -830,6 +838,24 @@ enableEmoji = true
     limit = 10
     # whether to show the full text content in feed.
     fullText = true
+    # Site Challenge for Follow: https://follow.is/
+    [params.feed.follow]
+      feedId = ""
+      userId = ""
+
+  # FixIt 0.3.12 | NEW Custom partials config
+  # Custom partials must be stored in the /layouts/partials/ directory.
+  # Depends on open custom blocks https://fixit.lruihao.cn/references/blocks/
+  [params.customPartials]
+    head = []
+    profile = []
+    aside = []
+    comment = []
+    footer = []
+    widgets = []
+    assets = []
+    postFooterBefore = []
+    postFooterAfter = []
 
   # FixIt 0.2.15 | NEW Developer options
   # Select the scope named `public_repo` to generate personal access token,
@@ -920,7 +946,7 @@ enableEmoji = true
     [params.page.heading]
       # FixIt 0.3.3 | NEW whether to capitalize automatic text of headings
       capitalize = false
-      # used with `markup.tableOfContents.ordered` parameter
+      # FixIt 0.3.12 | CHANGED must set `params.page.toc.ordered` to true
       [params.page.heading.number]
         # whether to enable auto heading numbering
         enable = false
@@ -961,9 +987,9 @@ enableEmoji = true
       # access token of Mapbox GL JS
       accessToken = ""
       # style for the light theme
-      lightStyle = "mapbox://styles/mapbox/light-v9"
+      lightStyle = "mapbox://styles/mapbox/light-v11"
       # style for the dark theme
-      darkStyle = "mapbox://styles/mapbox/dark-v9"
+      darkStyle = "mapbox://styles/mapbox/dark-v11"
       # whether to add NavigationControl
       navigation = true
       # whether to add GeolocateControl

@@ -3,7 +3,7 @@ import Util from './util';
 class FixIt {
   constructor() {
     this.config = window.config;
-    this.isDark = document.body.dataset.theme === 'dark';
+    this.isDark = document.documentElement.dataset.theme === 'dark';
     this.util = new Util();
     this.newScrollTop = this.util.getScrollTop();
     this.oldScrollTop = this.newScrollTop;
@@ -89,7 +89,7 @@ class FixIt {
   initSwitchTheme() {
     this.util.forEach(document.getElementsByClassName('theme-switch'), ($themeSwitch) => {
       $themeSwitch.addEventListener('click', () => {
-        document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = this.isDark ? 'light' : 'dark';
         this.isDark = !this.isDark;
         window.localStorage?.setItem('theme', this.isDark ? 'dark' : 'light');
         for (let event of this.switchThemeEventSet) {
@@ -334,7 +334,7 @@ class FixIt {
   }
 
   initDetails(target = document) {
-    this.util.forEach(target.getElementsByClassName('details'), ($details) => {
+    this.util.forEach(target.querySelectorAll('.details:not(.disabled)'), ($details) => {
       const $summary = $details.querySelector('.details-summary');
       $summary.addEventListener('click', () => {
         $details.classList.toggle('open');
@@ -669,7 +669,7 @@ class FixIt {
         this._mapboxArr = this._mapboxArr || [];
       }
       this.util.forEach(document.querySelectorAll('.mapbox:empty'), ($mapbox) => {
-        const { lng, lat, zoom, lightStyle, darkStyle, marked, navigation, geolocate, scale, fullscreen } = JSON.parse($mapbox.dataset.options);
+        const { lng, lat, zoom, lightStyle, darkStyle, marked, markers, navigation, geolocate, scale, fullscreen } = JSON.parse($mapbox.dataset.options);
         const mapbox = new mapboxgl.Map({
           container: $mapbox,
           center: [lng, lat],
@@ -680,6 +680,17 @@ class FixIt {
         });
         if (marked) {
           new mapboxgl.Marker().setLngLat([lng, lat]).addTo(mapbox);
+        }
+        const markerArray = typeof markers === 'string' ? JSON.parse(markers) : markers;
+        if (Array.isArray(markerArray) && markerArray.length > 0) {
+          markerArray.forEach(marker => {
+            const { lng: markerLng, lat: markerLat, description } = marker;
+            const popup = new mapboxgl.Popup({ offset: 25 }).setText(description); 
+            new mapboxgl.Marker()
+              .setLngLat([markerLng, markerLat])
+              .setPopup(popup)
+              .addTo(mapbox);
+          });
         }
         if (navigation) {
           mapbox.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
@@ -757,7 +768,7 @@ class FixIt {
             waitUntilVisible: true,
             loop: singleData.loop ? singleData.loop === 'true' : loop,
             afterComplete: () => {
-              const duration = Number(singleData.duration ?? vtypeitConfig.duration);
+              const duration = Number(singleData.duration ?? typeitConfig.duration);
               if (i === group.length - 1) {
                 if (duration >= 0) {
                   window.setTimeout(() => {
