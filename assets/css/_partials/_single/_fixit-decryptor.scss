@@ -14,29 +14,30 @@
     box-sizing: border-box;
     outline: none;
     color: $global-font-color;
-    border: 1px solid darken($global-border-color, 15%);
-    border-radius: $global-border-radius;
+    border: none;
+    border-bottom: 1px solid darken($global-border-color, 15%);
+    // border-radius: $global-border-radius;
     @include transition(all 0.1s ease-out);
-    box-shadow: 0px 0px 5px 0px darken($global-border-color, 15%);
+    // box-shadow: 0px 0px 5px 0px darken($global-border-color, 15%);
 
     &:active,
     &:focus,
     &:hover {
       color: darken($global-link-hover-color, 6%);
       border-color: $global-link-hover-color;
-      box-shadow: 0px 0px 5px 0px lighten($global-link-hover-color, 20%);
+      // box-shadow: 0px 0px 5px 0px lighten($global-link-hover-color, 20%);
 
-      [data-theme='dark'] & {
+      [data-theme="dark"] & {
         color: lighten($global-link-hover-color-dark, 6%);
         border-color: $global-link-hover-color-dark;
-        box-shadow: 0px 0px 5px 0px darken($global-link-hover-color-dark, 20%);
+        // box-shadow: 0px 0px 5px 0px darken($global-link-hover-color-dark, 20%);
       }
     }
 
-    [data-theme='dark'] & {
+    [data-theme="dark"] & {
       color: $global-font-color-dark;
       border-color: lighten($global-border-color-dark, 15%);
-      box-shadow: 0px 0px 5px 0px lighten($global-border-color-dark, 15%);
+      // box-shadow: 0px 0px 5px 0px lighten($global-border-color-dark, 15%);
     }
   }
 
@@ -47,7 +48,7 @@
     padding-right: 1rem;
     background-color: $global-background-color;
 
-    [data-theme='dark'] & {
+    [data-theme="dark"] & {
       background-color: $global-background-color-dark;
     }
   }
@@ -56,12 +57,14 @@
   .fixit-encryptor-btn {
     cursor: pointer;
     @include transition(all 0.1s ease-out);
-    padding: 0.8rem 1rem;
+    height: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 
-    background-color: $header-background-color;
+    background-color: $global-background-color;
 
-    [data-theme='dark'] & {
-      background-color: $header-background-color-dark;
+    [data-theme="dark"] & {
+      background-color: $global-background-color-dark;
     }
   }
 
