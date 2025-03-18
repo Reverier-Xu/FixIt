@@ -7,7 +7,26 @@
 $prefix: fi- !default;
 
 // Font and Line Height
-$global-font-family: "Iosevka", "JetBrains Mono", Menlo, -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", Consolas, Courier, monospace !default;
+$global-font-family:
+  "Iosevka",
+  "JetBrains Mono",
+  Menlo,
+  -apple-system,
+  "Noto Sans",
+  "Helvetica Neue",
+  Helvetica,
+  "Nimbus Sans L",
+  Arial,
+  "Liberation Sans",
+  "PingFang SC",
+  "Hiragino Sans GB",
+  "Noto Sans CJK SC",
+  "Source Han Sans SC",
+  "Source Han Sans CN",
+  "Microsoft YaHei",
+  Consolas,
+  Courier,
+  monospace !default;
 $global-font-size: 16px !default;
 $global-font-weight: 400 !default;
 $global-line-height: 1.5rem !default;
@@ -20,7 +39,7 @@ $global-border-radius: 5px !default;
 
 // Color of the background
 $global-background-color: #ffffff !default;
-$global-background-color-dark: #292a2e !default;
+$global-background-color-dark: #151515 !default;
 
 // Color of the text
 $global-font-color: #161209 !default;
@@ -63,7 +82,7 @@ $header-height: 3.5rem !default;
 
 // Color of the header background
 $header-background-color: #f8f8f8 !default;
-$header-background-color-dark: #252627 !default;
+$header-background-color-dark: #1a1a1a !default;
 
 // Font style of the header title
 $header-title-font-family: $global-font-family !default;
@@ -82,15 +101,15 @@ $submenu-height: $header-height * 0.5 !default;
 
 // Color of the search background
 $search-background-color: #e9e9e9 !default;
-$search-background-color-dark: #363636 !default;
+$search-background-color-dark: #202020 !default;
 // ========== Header ========== //
 
 // ========== Tag Cloud ========== //
 // Color range of tag cloud
-$tag-cloud-start: $global-font-secondary-color!default;
-$tag-cloud-end: $global-font-color!default;
-$tag-cloud-start-dark: $global-font-secondary-color-dark!default;
-$tag-cloud-end-dark: $global-font-color-dark!default;
+$tag-cloud-start: $global-font-secondary-color !default;
+$tag-cloud-end: $global-font-color !default;
+$tag-cloud-start-dark: $global-font-secondary-color-dark !default;
+$tag-cloud-end-dark: $global-font-color-dark !default;
 // ========== Tag Cloud ========== //
 
 // ========== Single Content ========== //
@@ -162,7 +181,13 @@ $code-info-color-dark: #b1b0b0 !default;
 $code-font-size: 0.875rem !default;
 
 // Font family of the code
-$code-font-family: Source Code Pro, Menlo, Consolas, Monaco, monospace, $global-font-family !default;
+$code-font-family:
+  Source Code Pro,
+  Menlo,
+  Consolas,
+  Monaco,
+  monospace,
+  $global-font-family !default;
 // ========== Code ========== //
 
 // ========== GitHub Corners ========== //
@@ -175,9 +200,9 @@ $github-corner-fill: $header-background-color-dark !default;
 $github-corner-fill-dark: $header-background-color !default;
 // ========== GitHub Corners ========== //
 
-@import '_partials/_maps/admonition';
-@import '_partials/_maps/alert';
-@import '_partials/_maps/code-highlight';
-@import '_partials/_maps/code-type';
-@import '_partials/_maps/colors';
-@import '_partials/_maps/utilities';
+@import "_partials/_maps/admonition";
+@import "_partials/_maps/alert";
+@import "_partials/_maps/code-highlight";
+@import "_partials/_maps/code-type";
+@import "_partials/_maps/colors";
+@import "_partials/_maps/utilities";
