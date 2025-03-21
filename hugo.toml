@@ -1190,7 +1190,7 @@ enableEmoji = true
         emitMetadata = "0"
         inputPosition = "top" # ["top", "bottom"]
         lightTheme = "noborder_light"
-        darkTheme = "transparent_dark"
+        darkTheme = "noborder_dark"
         lazyLoad = true
     # Third-party library config
     [params.page.library]
