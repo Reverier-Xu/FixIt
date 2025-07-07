@@ -1,8 +1,9 @@
 {
-  "name": "fixit-src",
-  "version": "0.3.11",
+  "name": "fixit-core",
+  "version": "0.4.0-alpha",
   "private": true,
-  "description": "FixIt theme source files",
+  "packageManager": "pnpm@10.5.2",
+  "description": "Hugo FixIt core theme component source files",
   "keywords": [
     "hugo",
     "theme",
@@ -21,16 +22,19 @@
   "type": "module",
   "scripts": {
     "build": "hugo --source=demo --themesDir ../.. --theme $PWD --gc --minify --logLevel info",
-    "server": "hugo server --source=demo --themesDir ../.. --theme $PWD -D --disableFastRender --navigateToChanged --ignoreCache",
+    "server": "hugo server --source=demo --themesDir ../.. --theme $PWD -D --disableFastRender --navigateToChanged --ignoreCache -O",
     "server:production": "npm run server -- -e production",
-    "server:docs": "hugo server --source=../fixit-docs -D --disableFastRender --navigateToChanged --ignoreCache",
-    "version": "node build/update-version.js --stage version",
+    "server:docs": "hugo server --source=../fixit-docs -D --disableFastRender --navigateToChanged --ignoreCache -O",
+    "version": "fixit-releaser version --prod",
     "postversion": "git push && git push --tags && npm run release",
-    "release": "auto-changelog --config build/changelog/config.json",
+    "release": "fixit-releaser changelog",
     "prepare": "husky"
   },
   "devDependencies": {
-    "auto-changelog": "^2.4.0",
-    "husky": "^9.1.4"
+    "@hugo-fixit/fixit-releaser": "^1.2.3",
+    "husky": "^9.1.7"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

@@ -665,6 +665,22 @@ tiktok:
   Icon:
     Class: fa-brands fa-tiktok
 
+# 085 Credly
+credly:
+  Weight: 85
+  Title: Credly
+  Prefix: https://www.credly.com/users/
+  Icon:
+    Class: fa-solid fa-certificate
+
+# 086: Bluesky
+bluesky:
+  Weight: 86
+  Title: Bluesky
+  Prefix: https://bsky.app/profile/
+  Icon:
+    Class: fa-brands fa-bluesky
+
 # Phone
 phone:
   Weight: 997
@@ -684,7 +700,7 @@ email:
 # RSS
 rss:
   Weight: 999
-  Url: /index.xml
+  Url: index.xml
   Title: RSS
   Newtab: true
   Icon:
