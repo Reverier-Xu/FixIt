@@ -1,0 +1,54 @@
+/**
+ * Style of layout named 'friends'.
+ * @Author: Lruihao <https://lruihao.cn>
+ * @Updated:  2022/3/11 21:36
+ */
+
+.friend-links {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.friend-link {
+  padding: 0.2rem;
+  margin: 0.5rem;
+  font-size: 1rem;
+  // background: rgba(255, 255, 255, 0.3);
+  box-sizing: border-box;
+  // box-shadow: 3px 3px 5px #aaa;
+  border: none;
+  border-bottom: 2px solid darken($global-border-color, 15%);
+  transition-duration: 0.3s;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.friend-link:hover {
+  // background: #fff;
+  border-bottom: 2px solid $global-link-hover-color;
+  @include transform(scale(1.03));
+  // box-shadow: 0 0 3px #aaa;
+}
+.friend-avatar {
+  object-fit: cover;
+  object-position: center;
+  aspect-ratio: 1 / 1;
+  width: 24px !important;
+  border-radius: 50%;
+  margin: 0;
+  padding: 0;
+  background: white;
+}
+.friend-nickname {
+  display: block;
+  position: relative;
+  font-weight: bold;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 24px;
+  margin-left: 0.5rem;
+}
