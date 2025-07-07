@@ -460,12 +460,12 @@ mainSections = []
 
   # FixIt 0.2.18 | NEW Breadcrumb config
   [params.breadcrumb]
-    enable = false
-    sticky = false
-    showHome = false
+    enable = true
+    sticky = true
+    showHome = true
     # FixIt 0.3.13 | NEW
-    separator = "/"
-    capitalize = true
+    separator = " / "
+    capitalize = false
 
   # FixIt 0.3.10 | NEW Post navigation config
   [params.navigation]
@@ -1058,7 +1058,7 @@ mainSections = []
       # whether to make the table of the contents in the sidebar automatically collapsed
       auto = true
       # FixIt 0.2.13 | NEW position of TOC ["left", "right"]
-      position = "right"
+      position = "left"
       # FixIt 0.3.12 | NEW supersede `markup.tableOfContents` settings
       ordered = false
       startLevel = 2
