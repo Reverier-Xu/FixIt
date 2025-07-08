@@ -493,7 +493,7 @@ mainSections = []
     # FixIt 0.2.12 | NEW Public network security only in China (HTML format is supported)
     gov = ""
     # ICP info only in China (HTML format is supported)
-    icp = "&nbsp;| <a href=\"https://beian.miit.gov.cn/\">豫ICP备20023182号-2</a> | <a href=\"https://icp.gov.moe/?keyword=20243307\" target=\"_blank\">萌ICP备20243307号</a>"
+    icp = "&nbsp;| <a href=\"https://beian.miit.gov.cn/\">豫ICP备20023182号-2</a> | <a href=\"https://beian.mps.gov.cn/#/query/webSearch\">豫公网安备41159002000165号</a> | <a href=\"https://icp.gov.moe/?keyword=20243307\" target=\"_blank\">萌ICP备20243307号</a>"
     # license info (HTML format is supported)
     license = ""
     # FixIt 0.3.0 | NEW whether to show Hugo and theme info
