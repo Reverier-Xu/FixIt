@@ -579,7 +579,7 @@ mainSections = []
       # FixIt 0.2.7 | CHANGED title shown in home page (HTML format is supported)
       title = "Reverier's Blog"
       # subtitle shown in home page
-      subtitle = "Idealism is that you will probably never receive something back<br> but nonetheless still decide to give."
+      subtitle = "Idealism is that you will never receive something back<br> but nonetheless still decide to give."
       # whether to use typeit animation for subtitle
       typeit = true
       # whether to show social links
