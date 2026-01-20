@@ -1235,7 +1235,7 @@ mainSections = []
       [params.page.comment.gitalk]
         enable = false
         owner = "Reverier-Xu"
-        repo = "blog_comment"
+        repo = "discussions"
         clientId = ""
         clientSecret = ""
       # Valine comment config (https://github.com/xCss/Valine)
@@ -1324,7 +1324,7 @@ mainSections = []
       # FixIt 0.2.14 | NEW Giscus comments config
       [params.page.comment.giscus]
         enable = true
-        repo = "Reverier-Xu/blog_comment"
+        repo = "Reverier-Xu/discussions"
         repoId = "MDEwOlJlcG9zaXRvcnkyNTg3NzMwNzY="
         category = "Announcements"
         categoryId = "DIC_kwDOD2yQVM4Cb9wY"
